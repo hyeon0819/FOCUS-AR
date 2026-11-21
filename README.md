@@ -9,9 +9,9 @@ Kyungpook National University, South Korea
 
 ### ACCV 2026
 
-</div>
-
 **TL;DR:** **FOCUS-AR** (**F**actorized **O**bservable **C**ontext **U**nder**S**tanding for **A**ction **R**ecognition) factorizes each action description into shared, motion, and appearance factors and aligns RGB and skeleton features only with the factors each modality can observe.
+
+</div>
 
 ## Installation
 
