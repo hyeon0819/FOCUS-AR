@@ -1,0 +1,25 @@
+_base_: ../default.yaml
+task: base2novel
+dataset: hmdb51
+split: 1                # base-class training split (1, 2, 3)
+work_dir: work_dirs/base2novel/hmdb51_split{split}
+
+data:
+  video_root: data/hmdb51/videos
+  skeleton_file: data/hmdb51/skeletons.pkl
+  train:
+    ann_file: splits/hmdb51/base2novel/train_s{split}.txt
+    label_file: labels/hmdb51_base.json
+  test:
+    base:
+      splits: [{ann_file: splits/hmdb51/base2novel/val_base.txt, label_file: labels/hmdb51_base.json}]
+    novel:
+      splits: [{ann_file: splits/hmdb51/base2novel/val_novel.txt, label_file: labels/hmdb51_novel.json}]
+
+skeleton:
+  num_class: 26
+  checkpoint: checkpoints/skeleton/hmdb51_base/best.pth
+
+optim:
+  epochs: 20
+  warmup_epochs: 3

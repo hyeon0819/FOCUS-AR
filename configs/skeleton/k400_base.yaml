@@ -1,0 +1,8 @@
+_base_: default.yaml
+work_dir: checkpoints/skeleton/k400_base
+num_class: 200
+epochs: 85
+data:
+  skeleton_file: data/k400/skeletons.pkl
+  train: splits/k400/base2novel/train_base_full.txt
+  val: splits/k400/base2novel/val_base.txt

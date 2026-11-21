@@ -1,0 +1,24 @@
+_base_: ../default.yaml
+task: fewshot
+dataset: hmdb51
+shot: 2                 # labeled videos per class (2, 4, 8, 16)
+work_dir: work_dirs/fewshot/hmdb51_k{shot}
+
+data:
+  video_root: data/hmdb51/videos
+  skeleton_file: data/hmdb51/skeletons.pkl
+  train:
+    ann_file: splits/hmdb51/fewshot/train_k{shot}.txt
+    label_file: labels/hmdb51.json
+  test:
+    hmdb51:
+      splits: [{ann_file: splits/hmdb51/val1.txt, label_file: labels/hmdb51.json}]
+
+skeleton:
+  num_class: 26
+  checkpoint: checkpoints/skeleton/hmdb51_base/best.pth
+
+optim:
+  epochs: 50
+  warmup_epochs: 5
+  lr: 2.0e-6

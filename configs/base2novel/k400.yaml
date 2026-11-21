@@ -1,0 +1,25 @@
+_base_: ../default.yaml
+task: base2novel
+dataset: k400
+split: 1                # base-class training split (1, 2, 3)
+work_dir: work_dirs/base2novel/k400_split{split}
+
+data:
+  video_root: data/k400/videos
+  skeleton_file: data/k400/skeletons.pkl
+  train:
+    ann_file: splits/k400/base2novel/train_s{split}.txt
+    label_file: labels/k400_base.json
+  test:
+    base:
+      splits: [{ann_file: splits/k400/base2novel/val_base.txt, label_file: labels/k400_base.json}]
+    novel:
+      splits: [{ann_file: splits/k400/base2novel/val_novel.txt, label_file: labels/k400_novel.json}]
+
+skeleton:
+  num_class: 200
+  checkpoint: checkpoints/skeleton/k400_base/best.pth
+
+optim:
+  epochs: 15
+  warmup_epochs: 3

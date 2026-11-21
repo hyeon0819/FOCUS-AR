@@ -1,0 +1,60 @@
+# ---------------------------------------------------------------- model
+clip_arch: ViT-B/16
+num_frames: 16          # RGB frames per clip (skeleton frames are aligned to them)
+input_size: 224
+context_length: 77
+n_ctx: 4                # learnable prompt tokens
+ctx_init: a photo of a
+condition_layer: 12     # prompt tokens are conditioned on RGB + skeleton context before this text layer
+context_token_k: 96     # RGB context tokens from the TC-CLIP vision encoder
+seed_token_a: 0.3
+tome_r: 100
+
+skeleton:
+  num_person: 5         # top-5 person tracks per video
+  num_class: null       # classes of the skeleton-encoder pretraining set
+  checkpoint: null      # BlockGCN encoder, see configs/skeleton
+
+gate:                   # initial logits of the gating scalars
+  skeleton_prior_init: -1.5
+  motion_init: -2.0
+  appearance_init: -3.0
+
+# ---------------------------------------------------------------- loss
+loss:
+  lambda_coh: 0.1
+  lambda_orth: 0.03
+  lambda_div: 0.5
+  label_smoothing: 0.1
+  mixup: 0.8
+  cutmix: 1.0
+  switch_prob: 0.5
+
+aug:
+  color_jitter: 0.8
+  gray_scale: 0.2
+
+# ---------------------------------------------------------------- optimization
+optim:
+  epochs: 15
+  warmup_epochs: 3
+  lr: 3.33e-6           # CLIP backbone
+  lr_min_ratio: 0.01
+  lr_prompt_mult: 10    # prompt tokens and prompt conditioner
+  lr_focus: 5.0e-4      # skeleton refinement, factorization, gate MLP
+  lr_gate: 5.0e-3       # gating scalars
+  weight_decay: 0.001
+  weight_decay_focus: 0.01
+  betas: [0.9, 0.98]
+  total_batch_size: 64
+
+batch_size: 4           # per GPU (gradients are accumulated to total_batch_size)
+test_batch_size: 8
+num_workers: 8
+num_test_clips: 3       # temporal views at test time
+use_amp: true
+seed: 1024
+print_freq: 50
+
+data:
+  cache_dir: data/cache

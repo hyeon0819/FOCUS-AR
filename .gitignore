@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.egg-info/
+data/*
+checkpoints/
+work_dirs/
+*.log
+.ipynb_checkpoints/
+*.pt
+*.pth

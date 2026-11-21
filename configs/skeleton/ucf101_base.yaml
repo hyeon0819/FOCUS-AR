@@ -1,0 +1,7 @@
+_base_: default.yaml
+work_dir: checkpoints/skeleton/ucf101_base
+num_class: 51
+data:
+  skeleton_file: data/ucf101/skeletons.pkl
+  train: splits/ucf101/base2novel/train_base_full.txt
+  val: splits/ucf101/base2novel/val_base.txt

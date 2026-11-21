@@ -1,0 +1,58 @@
+_base_: ../default.yaml
+task: zeroshot
+dataset: k400
+work_dir: work_dirs/zeroshot/k400
+
+data:
+  video_root: data/k400/videos
+  skeleton_file: data/k400/skeletons.pkl
+  train:
+    ann_file: splits/k400/train.txt
+    label_file: labels/k400.json
+  val:                  # monitored after every epoch
+    ann_file: splits/k400/val.txt
+    label_file: labels/k400.json
+  test:
+    ucf101:
+      video_root: data/ucf101/videos
+      skeleton_file: data/ucf101/skeletons.pkl
+      splits:
+        - {ann_file: splits/ucf101/val1.txt, label_file: labels/ucf101.json}
+        - {ann_file: splits/ucf101/val2.txt, label_file: labels/ucf101.json}
+        - {ann_file: splits/ucf101/val3.txt, label_file: labels/ucf101.json}
+    hmdb51:
+      video_root: data/hmdb51/videos
+      skeleton_file: data/hmdb51/skeletons.pkl
+      splits:
+        - {ann_file: splits/hmdb51/val1.txt, label_file: labels/hmdb51.json}
+        - {ann_file: splits/hmdb51/val2.txt, label_file: labels/hmdb51.json}
+        - {ann_file: splits/hmdb51/val3.txt, label_file: labels/hmdb51.json}
+    k600:
+      video_root: data/k600/videos
+      skeleton_file: data/k600/skeletons.pkl
+      splits:
+        - {ann_file: splits/k600/split1.txt, label_file: labels/k600_split1.json}
+        - {ann_file: splits/k600/split2.txt, label_file: labels/k600_split2.json}
+        - {ann_file: splits/k600/split3.txt, label_file: labels/k600_split3.json}
+
+skeleton:
+  num_class: 400
+  checkpoint: checkpoints/skeleton/k400/best.pth
+
+loss:
+  lambda_coh: 0.5
+
+optim:
+  epochs: 12
+  warmup_epochs: 3
+  lr: 8.0e-6
+  lr_focus: 2.0e-4
+  lr_gate: 2.0e-3
+  total_batch_size: 256
+
+batch_size: 2
+
+# Weights of epochs [first, last] are averaged, then ensembled in weight space with the
+# initial model (pretrained CLIP).
+average_epochs: [1, 8]
+wise_alpha: 0.7         # weight of the fine-tuned model
